@@ -23,6 +23,6 @@ jobs:
       run: |
         docker buildx create --use
         docker buildx build \
-          --file ./Dockerfile \
+          --file ../../my_library/Dockerfile \
           --tag ${{ secrets.DOCKERHUB_USERNAME }}/my_project:latest \
           --push .
