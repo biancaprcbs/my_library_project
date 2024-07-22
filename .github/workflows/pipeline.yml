@@ -1,0 +1,28 @@
+name: FastAPI & Docker Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Verificação do código
+      uses: actions/checkout@v4
+
+    - name: Configurando o Docker Build
+      uses: docker/setup-buildx-action@v1
+      
+    - name: Login no Docker Hub
+      run: echo ${{ secrets.DOCKERHUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+    - name: Build e push da imagem do Docker
+      run: |
+        docker buildx create --use
+        docker buildx build \
+          --file Dockerfile \
+          --tag ${{ secrets.DOCKERHUB_USERNAME }}/my_project:latest \
+          --push .
